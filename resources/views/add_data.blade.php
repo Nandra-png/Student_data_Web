@@ -13,7 +13,7 @@
 
         <div class="p-6">
             <form action="{{ route('students.store') }}" method="POST" class="max-w-3xl mx-auto space-y-6">
-                @csrf
+                @csrf   
                 <!-- Form fields tetap sama -->
                 <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                     <div class="sm:col-span-2">
