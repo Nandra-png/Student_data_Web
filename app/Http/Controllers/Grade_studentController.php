@@ -47,7 +47,7 @@ class Grade_studentController extends Controller
     {
         // Ambil data grade berdasarkan ID
         $grade_student = Grade_student::findOrFail($id);
-        
+
         return view('edit_data_grade', [
             'title' => 'Edit Grade',
             'grade_student' => $grade_student,

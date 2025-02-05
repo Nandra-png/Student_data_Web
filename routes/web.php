@@ -36,3 +36,5 @@ Route::get('/admin/grade_student/edit/{id}', [Grade_studentController::class, 'e
 Route::put('/admin/grade_student/update/{id}', [Grade_studentController::class, 'update'])->name('grade.update');
 Route::get('/add-data-department', [DepartmenController::class, 'addDataDepartment'])->name('add.data.department');
 Route::post('/admin/department/store', [DepartmenController::class, 'store'])->name('department.store');
+Route::get('/students/search', [StudentController::class, 'search'])->name('students.search');
+Route::get('/students/search2', [StudentController::class, 'search2'])->name('students.search2');

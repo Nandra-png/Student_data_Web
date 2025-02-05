@@ -6,6 +6,7 @@ use App\Models\Departmen;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Student extends Model
 {
@@ -20,4 +21,16 @@ class Student extends Model
     {
         return $this->belongsTo(Departmen::class);
     }
+
+    public static function getGradeWithDepartment()
+{
+    return DB::table('grade_students')
+        ->select(
+            'grade_students.id',
+            'grade_students.name',
+            'departmens.name'
+        )
+        ->join('departmens', 'grade_students.departmen_id', '=', 'departmens.id')
+        ->orderBy('grade_students.name', 'asc');
+}
 }

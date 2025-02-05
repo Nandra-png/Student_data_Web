@@ -29,14 +29,17 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
                     </div>
-                    <input type="search" class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for students...">
+                    <form action="{{ route('students.search') }}" method="GET" class="mb-4">
+                        <input type="text" name="query" placeholder="Search students..." class="border rounded-lg p-2 pl-10" />
+                        <button type="submit" class="bg-blue-500 text-white rounded-lg p-2">Search</button>
+                    </form>
                 </div>
             </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                         <tr>
-                            <th scope="col" class="px-6 py-4">ID</th>
+                            <th scope="col" class="px-6 py-4">No</th>
                             <th scope="col" class="px-6 py-4">Name</th>
                             <th scope="col" class="px-6 py-4">Grade</th>
                             <th scope="col" class="px-6 py-4">Department</th>
@@ -48,7 +51,7 @@
                     <tbody>
                         @foreach ($students as $student)
                             <tr class="bg-white border-b hover:bg-gray-50 transition-all duration-200">
-                                <td class="px-6 py-4 font-medium text-gray-900">#{{$student->id}}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -104,8 +107,15 @@
                                 </td>
                             </tr>
                         @endforeach
+
+
                     </tbody>
+
                 </table>
+
+            </div>
+            <div class="mt-4">
+                {{ $students->links() }}
             </div>
         </div>
     </div>

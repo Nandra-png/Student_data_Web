@@ -6,6 +6,7 @@ use App\Models\Grade_student;
 use App\Models\Student;
 use App\Models\Departmen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -14,20 +15,30 @@ class StudentController extends Controller
         if(request()->is('admin/*')) {
             return view('admin.student_admin', [
                 'title' => 'Student Management',
-                'students' => Student::with(['grade_student', 'departmen'])->get()
+                'students' => Student::orderBy('created_at', 'desc')->paginate(25),
+
             ]);
         }
-
         return view('student', [
             'title' => 'Student',
-            'students' => Student::with(['grade_student', 'departmen'])->get()
+            'students' => Student::orderBy('created_at', 'desc')->paginate(25)
+
         ]);
     }
 
     public function addData()
     {
+        $grade_students = DB::table('grade_students')
+        ->select(
+            'grade_students.id',
+            'grade_students.name',
+            'departmens.name as departmen'
+        )
+        ->join('departmens', 'grade_students.departmen_id', '=', 'departmens.id')
+        ->orderBy('grade_students.name', 'asc')
+        ->get();
         return view('add_data', [
-            'grade_students' => Grade_student::all(),
+            'grade_students' => $grade_students,
             'departmens' => Departmen::all()
         ]);
     }
@@ -36,7 +47,7 @@ class StudentController extends Controller
     {
         // Ambil data siswa berdasarkan ID
         $student = Student::findOrFail($id);
-        
+
         // Ambil data grade_students untuk dropdown
         $grade_students = Grade_student::all();
 
@@ -96,7 +107,7 @@ class StudentController extends Controller
 
         // Dapatkan departmen_id dari grade_student yang dipilih
         $grade_student = Grade_student::findOrFail($validated['grade_student_id']);
-        
+
         // Simpan data student ke dalam tabel students
         Student::create([
             'name' => $validated['name'],
@@ -109,4 +120,28 @@ class StudentController extends Controller
         // Redirect dengan pesan sukses
         return redirect('admin/student')->with('success', 'Student created successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $students = Student::where('name', 'LIKE', "%{$query}%")->paginate(25);
+
+        return view('admin.student_admin', [
+            'title' => 'Student Management',
+            'students' => $students
+        ]);
+    }
+
+
+    public function search2(Request $request)
+    {
+        $query = $request->input('query');
+        $students = Student::where('name', 'LIKE', "%{$query}%")->paginate(25);
+
+        return view('student', [
+            'title' => 'Student',
+            'students' => $students
+        ]);
+    }
+
 }
